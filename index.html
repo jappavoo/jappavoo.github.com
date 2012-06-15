@@ -1,29 +1,52 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html> <head>
 <title>Jonathan Appavoo</title>
+<style type="text/css">
+<!--
+A:link {color: #bab8b9; text-decoration: none}
+A:visited {color: #bab8b9; text-decoration: none}
+A:active {color: #bab8b9; text-decoration: none}
+A:hover {color: #ff0000; text-decoration: none}
+-->
+</style>
+
 </head>
 
-<body link="#FF0000" vlink="#FF0000" alink="#000000">
+<body>
 
-<div style="position: relative;
-  background: url(images/river.png); width: 700px; height: 400px;">
-  <div style="position: absolute; top: 65px; left: 400px; width:
-    500px; font-size: xx-large; text-shadow: 0.10em 0.15em 0.2em black; font-weight: bold; color: #bab8b9; text-align: left">
+<div style="position: relative">
+
+<div style="position: relative; float: left font-size:large;
+      font-weight: bold; text-align: left;
+      border-width: 0px; padding: 0px">
+  <a href="#contact">Contact Info</a>
+  &nbsp; <a href="#research">Research</a>
+  &nbsp; <a href="#teaching">Teaching</a>
+  &nbsp; <a href="#friends">Students & Collaborators</a>
+  &nbsp; <a href="pubs.html">Publications</a>
+</div>
+
+<div style="position: relative; background: url(images/river.png); width: 700px; height: 400px;">
+
+
+<div style="position: absolute; top: 65px; left: 400px; width: 500px; font-size: xx-large; text-shadow: 0.10em 0.15em 0.2em black; font-weight: bold; color: #bab8b9; text-align: left">
     <p>Jonathan Appavoo</p>
-  </div>
- <div style="position: absolute; bottom: 45px; left: 20px; width: 113px; height: 51px;">
-    <a href="http://www.bu.edu"><img src="images/bu.gif" width="113px"; height="51px"></a>
- </div>
-  <div style="position: absolute; bottom: 20px; left: 140px; width:
-    800px; font-size: x-large; text-shadow: 0.10em 0.10em 0.2em black; font-weight: bold; color: #f00; text-align: left">
-    <p>
-      <a href="http://www.cs.bu.edu">Department of Computer</a><br>
-      <a href="http://www.bu.edu/cas">College of Arts and Science</a>
-    </p>
-  </div>
+</div>
+
+<div style="position: absolute; bottom: 45px; left: 20px; width: 113px; height: 51px;">
+  <a href="http://www.bu.edu"><img src="images/bu.gif" width="113px"; height="51px"></a>
+</div>
+
+<div style="position: absolute; bottom: 20px; left: 140px; width: 800px; font-size: x-large; text-align: left; text-shadow: 0.10em 0.15em 0.2em black;">
+  <p>
+  <a href="http://www.cs.bu.edu">Department of Computer</a><br>
+  <a href="http://www.bu.edu/cas">College of Arts and Science</a>
+  </p>
+</div>
  
 </div>
 
+</div>
 
 <div style="position: relative; width: 700px; height: 120px">
   <div style="position: relative; float: left; background-color:
@@ -47,10 +70,63 @@
 </div>
 <br>
 
-<div style="position: relative; width: 700px; height: 500px">
+<a name="research">
+<div style="position: relative; background-color:
+  #FFFFFF; width: 680px; border-width:3px;
+  border-color: #bab8b9; border-style: groove; padding: 6px">
+
+  <p style="font-weight: bold; font-style: italic">Research -
+  Pursuing Future Computer Systems</p>
+
+  <p style="font-style: italic">
+  My interest is in pursuing how we will advance the capabilities of
+  computers in the coming decades, such that new systems continue to
+  dwarf the power of systems that preceded them. I am pursuing this
+  along two dimensions. The first, is evolutionary in nature and the
+  second, longer-term, is deconstructive and basic science in nature.
+  </p>
   
-<div style="position: relative; float: left; background-color:
-  #FFFFFF; width: 213px; height: 500px; border-width:3px;
+  <p style="font-style: italic">
+  The first aspect of my research continues to look at the evolution
+  of large scale computers systems and their efficient use.  In
+  project Kittyhawk we began to explore conjectures about
+  cloud-computing as an evolution to market-driven global scale
+  computers and computation.  In particular we explored the viability
+  of advanced general purpose data-center scale systems that evolve
+  from today's super-computers.  In manner, howerver, where the usage is not only
+  unique because of the system massive scale and advance integrated communications but
+  also its ability to elastically permit the allocation and deallocation
+  of raw physical nodes in sub-second times.  We view such underlying
+  systems as forming the basic resource layer of a Scalable Eastic
+  Systems Architecture (SESA).  We are now looking at the role
+  of operating systems software on top of such a resource layer.  We
+  have identified a new elastic OS and application model, called the
+  MultiLibOS, and are constructing and evaluating a specific research prototype
+  called EbbOS.
+  </p>
+  
+  <p style="font-style: italic"> During my work exploring scalable
+  software models for large scale systems I have developed a machine
+  model called "Programmable Smart Machines" that combines classical
+  logic-based computation with pattern matching/statistical methods.
+  We conjecture that this model can yield systems that can be
+  programmed easily with little or no regard to the system's physical
+  structure, but whose performance and function improve automatically
+  with system size and ``experience''.  This conjecture and the
+  various avenues for pursuing it forms the second dimension of my
+  work.  I believe this conjecture is a rich area of study that may have
+  the long-term potential of disruptive results that could suggest a
+  new kind of general purpose programmable intelligent system that can
+  be practically realized.
+</p>
+
+  <p><a style="color: #ff0000" href="research.html">Research Pages</a></p>
+</div>
+</a>
+
+<a name="teaching">
+<div style="position: relative; background-color:
+  #FFFFFF; width: 680px; border-width:3px;
   border-color: #bab8b9; border-style: groove; padding: 6px">
 
   <p style="font-weight: bold; font-style: italic">Teaching - Clarity,
@@ -63,32 +139,14 @@
   develop the technical skills necessary to achieve their goals and
   the third is to challenge students to find the beauty in all
   subjects.</p>
-
-  <p><a href="http://www.bu.edu">Teaching Pages</a></p>
+  
+  <p><a style="color: #ff0000" href="teaching.html">Teaching Pages</a></p>
 </div>
+</a>
 
-<div style="position: relative; float: left; background-color:
-  #FFFFFF; width: 213px; height: 500px; border-width:3px;
-  border-color: #bab8b9; border-style: groove; padding: 6px">
-
-  <p style="font-weight: bold; font-style: italic">Research - Interfacing Computers and Cortical function : A new kind of System</p>
-
-  <p style="font-style: italic">Over the past several years I have
-  been working in the area of systems research with a focus on
-  operating systems software concurrency and scalability.  During this
-  time I have developed a conjecture of how the stochastic behavior of
-  a complete complex system reveals underlying structure in the
-  computation and exogenous interactions.   I believe this phenomenon
-  is a rich area of study which has the potential to yield important
-  results that suggest a new kind of general purpose programmable
-  intelligent system that can be practically realized.</p>
-
-  <p><a href="http://www.bu.edu">Research Pages</a></p>
-</div>
-
-<div style="position: relative; width: 700px; height: 500px">
-  <div style="position: relative; float: left; background-color:
-  #FFFFFF; width: 213px; height: 500px; border-width:3px;
+<a name="friends">
+<div style="position: relative; background-color:
+  #FFFFFF; width: 680px; border-width:3px;
   border-color: #bab8b9; border-style: groove; padding: 6px">
         <p style="font-weight: bold; font-style: italic">Colleagues and Students</p>
     <p style="font-style: italic">
@@ -99,9 +157,11 @@
       Orran Kreiger</br>
       Eric Van Hensbergen
     </p>
-  </div>
 </div>
+</a>
+
 </br>
+<a name="contact">
 <p style="font-weight: bold">
 Contact info:</br>
 Jonathan Appavoo </br>
@@ -112,7 +172,8 @@ Boston MA 02215 </br>
 </br>
 j_a_p_p_a_v_o_o @ b_u . e_d_u
 </p>
+</a>
 <hr>
-<!-- hhmts start -->Last modified: Thu Jun 14 15:20:15 EDT 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Fri Jun 15 00:24:40 EDT 2012 <!-- hhmts end -->
 </body>
 </html>
