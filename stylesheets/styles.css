@@ -84,7 +84,7 @@ th, td {
 
 dt {
   color:#444;
-  font-weight:700;
+  font-weight:650;
 }
 
 th {
@@ -96,10 +96,11 @@ img {
 }
 
 header {
-  width:270px;
+  width:290px;
   float:left;
   position:fixed;
 }
+
 
 header ul {
   list-style:none;
@@ -160,9 +161,24 @@ header ul a strong {
 }
 
 section {
-  width:500px;
+  width:550px;
   float:right;
   padding-bottom:50px;
+}
+
+menu {
+  width:110px;
+  float:left;
+  position:fixed;
+  padding-bottom:0px;
+  padding-top:0px;
+}
+
+content {
+  width:690px;
+  float:right;
+  padding-bottom:0px;
+  padding-top:0px;
 }
 
 small {
@@ -190,7 +206,7 @@ footer {
     margin:0;
   }
   
-  header, section, footer {
+  header, section, footer, menu {
     float:none;
     position:static;
     width:auto;
@@ -200,6 +216,7 @@ footer {
     padding-right:320px;
   }
   
+
   section {
     border:1px solid #e5e5e5;
     border-width:1px 0;
