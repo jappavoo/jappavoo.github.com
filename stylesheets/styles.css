@@ -3,8 +3,9 @@
 body {
   padding:50px;
   font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:#777;
-  font-weight:300;
+  color:#353535;
+  background-color:#f8f8f8;
+  font-weight:400;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -33,9 +34,13 @@ h3, h4, h5, h6 {
 }
 
 a {
-  color:#39c;
-  font-weight:400;
+  color:#287aa3; 
   text-decoration:none;
+}
+
+a:hover{
+  color:#39c;
+  text-decoration:underline;
 }
 
 a small {
@@ -98,7 +103,7 @@ img {
 header {
   width:290px;
   float:left;
-  position:fixed;
+  position:relative;
 }
 
 
@@ -166,6 +171,25 @@ section {
   padding-bottom:50px;
 }
 
+div.box {
+  padding-bottom: 30px;
+}
+
+ul.article-list{
+  list-style:none;
+  padding:0px;
+  margin: 0px;
+}
+
+ul.article-list li{
+  padding: 8px;
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
+  border-color: #cecece;
+  width:100%
+}
+
+
 menu {
   width:110px;
   float:left;
@@ -199,6 +223,18 @@ footer {
   bottom:50px;
 }
 
+div.box h2{
+  border-width: 0px 0px 2px 0px;
+  border-style: solid;
+  border-color: #b9b9b9;
+  width:100%
+  margin:0px;
+  padding:0px;
+}
+
+ul.article-list a{
+  font-style: italic;
+}
 @media print, screen and (max-width: 960px) {
   
   div.wrapper {
