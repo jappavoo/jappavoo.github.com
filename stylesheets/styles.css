@@ -1,11 +1,22 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
 
+html { 
+/*  background: url(../images/greyscale-photo.jpg) no-repeat center center fixed; 
+*/
+  background-color:#edf4f5;
+-webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 body {
   padding:50px;
   font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:#353535;
-  background-color:#f8f8f8;
   font-weight:400;
+  margin:0px;
+  padding:0px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -33,6 +44,10 @@ h3, h4, h5, h6 {
   color:#494949;
 }
 
+.clear{
+  clear:both;
+}
+
 a {
   color:#287aa3; 
   text-decoration:none;
@@ -50,9 +65,14 @@ a small {
   display:block;
 }
 
-.wrapper {
+div.wrapper {
   width:860px;
   margin:0 auto;
+  padding:70px;
+  background-color:#f8f8f8;
+  border-width: 0px 3px 0px 3px;
+  border-style: solid;
+  border-color: gray;
 }
 
 blockquote {
