@@ -67,10 +67,11 @@ a small {
 
 div.wrapper {
   width:860px;
+  height:100%;
   margin:0 auto;
   padding:70px;
   background-color:#f8f8f8;
-  border-width: 0px 3px 0px 3px;
+  border-width: 0px 3px 3px 3px;
   border-style: solid;
   border-color: gray;
 }
@@ -123,7 +124,7 @@ img {
 header {
   width:290px;
   float:left;
-  position:relative;
+  position:fixed;
 }
 
 
@@ -195,13 +196,13 @@ div.box {
   padding-bottom: 30px;
 }
 
-ul.article-list{
+ul.fancy-list{
   list-style:none;
   padding:0px;
   margin: 0px;
 }
 
-ul.article-list li{
+ul.fancy-list li{
   padding: 8px;
   border-width: 0px 0px 1px 0px;
   border-style: solid;
@@ -252,7 +253,7 @@ div.box h2{
   padding:0px;
 }
 
-ul.article-list a{
+ul.fancy-list a{
   font-style: italic;
 }
 @media print, screen and (max-width: 960px) {
