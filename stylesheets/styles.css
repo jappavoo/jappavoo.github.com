@@ -124,7 +124,7 @@ img {
 header {
   width:290px;
   float:left;
-  position:relative;
+  position:fixed;
 }
 
 
