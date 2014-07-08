@@ -1,0 +1,584 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>CAS CS451/651 Distributed Systems Spring 2013</title>
+</head>
+
+<body link="#FF0000" vlink="#FF0000" alink="#000000">
+<div style="position: relative;
+  background: url(images/cs451banner.png); width: 702px; height: 217px;">
+  <div style="position: absolute; top: -25px; left: 110px; width:
+    500px; font-size: xx-large; text-shadow: 0.10em 0.15em 0.2em black; font-weight: bold; color: #fff; text-align: left">
+    <p>CAS CS451/651 Distributed Systems<br>Spring 2013</p>
+  </div>
+ <div style="position: absolute; bottom: 5px; left: 20px; width: 113px; height: 51px;">
+    <a href="http://www.bu.edu"><img src="images/bu.gif" width="113px"; height="51px"></a>
+ </div>
+  <div style="position: absolute; bottom: -20px; left: 135px; width:
+    800px; font-size: x-large; text-shadow: 0.10em 0.10em 0.2em black; font-weight: bold; color: #f00; text-align: left">
+    <p>
+      <a href="http://www.cs.bu.edu">Department of Computer</a><br>
+      <a href="http://www.bu.edu/cas">College of Arts and Science</a>
+    </p>
+  </div>
+ 
+</div>
+<p style="font-style:italic; font-weight: bold">
+"A distributed system is a collection of independent computers that appears to its users as a single coherent system." [Tanenbaum and Steen 2006]. Every major internet service is a distributed system. Examples include Google, Facebook, Youtube, banking websites and for that matter the World Wide Web itself. Other fundamental services such as Global Positioning Systems (GPS), Domain Name Services (DNS) and email are also distributed systems. For students to be effective, today and in the future, as decision makers, technical advisors, innovators and implementors they should be familiar with the principles and paradigms that underlying this important class of systems.</p>
+
+
+<blockquote>
+<hr>
+<pre>
+This page <a
+href="http://www.cs.bu.edu/~jappavoo/webpages/cs451.html">http://www.cs.bu.edu/~jappavoo/webpages/cs451.html
+</a>the course <a href="http:piazza.com/bu/spring2013/cs451651">piazza site</a>
+</pre>
+<ul>
+<li><a href="#announce">Announcements/NEWS</a></li>
+<li><a href="#instructor">Instructor</a></li>
+<li><a href="#office">Office Hours</a></li>
+<li><a href="#time">Time And Place</a></li>
+<li><a href="#desc">Course Description</a></li>
+<li><a href="#prereq">Prerequisites</a></li>
+<li><a href="#grade">Grade Break Down</a></li>
+<li><a href="#structure">Weekly Class Structure and
+Evaluation</a></li>
+<li><a href="#project">Project and Workload</a></li
+><li><a href="#651">CS651</a></li>
+<li><a href="#schedule">Class Schedule</a></li>
+<ul>
+  <li><a href="#byweek">By Week</a></li>
+  <li><a href="#exams">Tests/Exams</a></li>
+  <li><a href="#labs">Labs</a></li>
+</ul>
+<li><a href="#texts">TextBooks</a></li>
+<li><a href="#oref">Online References</a></li
+<li><a href="#honesty">Academic Honesty</a></li>
+</ul>
+<hr>
+</blockquote>
+
+<hr>
+<h1><a name="announce">Announcements/NEWS</a></h1>
+<hr>
+
+The server <b>curzon.bu.edu</b> for the course is up and running.  Please do
+all your course related work on curzon. curzon can only be accessed from
+within the bu network so you will first need to login to one of the
+external cs servers such as csa3 or csa2 and the <a href="ssh://curzon.bu.edu">ssh to curzon</a>.
+
+<hr>
+<b>Added a <a href="http://piazza.com/bu/spring2013/cs451651">piazza site</a></b> for this
+course.  Please enroll yourself.
+In general all announcements and news will be on piazza
+<hr>
+
+<b>Welcome! Here's to a fun term hacking!</b>
+<hr>
+
+
+<h1><a name="instructor">Instructor</a></h1>
+<a href="http://www.cs.bu.edu/~jappavoo">Prof. Jonathan Appavoo</a>
+<br><a href="http://www.bu.edu/maps/?id=757">Math & Computer Science
+Building</a> Office: <b>284</b>  
+<br> 111 Cummington Street, Boston, MA
+<br>Phone: (617) 358-1062
+<br>Email: jappavoo (at) cs.bu.edu
+<br><a name="office">Office Hours: Tuesday, Wednesday 5:00pm -
+6:00pm</a>
+<br>
+To reach me at times other than my office hours, please send me
+email.
+<p>
+The purpose of the office hours of the Instructor
+is to answer specific questions or clarify specific issues. Office
+hours are not to be used to fill you in on a class you skipped or to
+explain entire topics. 
+
+<hr>
+<h1><a name="time">Time And Place</a></h1>
+<dl>
+  <dt><b>Time:</b></dt><dd>Tuesday, Thursday 9:30am to 11:00am</dd>
+  <dt><b>Place:</b></dt><dd>CAS 212</dd> 
+</dl>
+<hr>
+<h1><a name="desc">Course Description</a></h1>
+<h2>Introduction</h2>
+<p>
+CS451/651 (Distributed Systems) is a fast-paced, broad and practical
+introduction to the fundamentals of distributed systems. The course first 
+examines foudational topics such as: System Models, Networking, Interprocess
+Communications, Remote Invocation, Indirect Communications, and
+Operating Systems Support.  After covering the foundations a selection
+of topics will be covered from: Distributed algorithms, Shared data,
+Middleware, System services.
+
+A major goal of the course is to provide practical exposure to
+distributed systems through a term long programming project in which
+small groups of students construct a distributed game using 'C'.  The
+project requires significant programming effort.
+
+<h2>Formal Description</h2>
+<p>
+Programming-centric introduction to how networks of computers are
+structured to operate as coherent single system. Introducing
+principles of architecture, processes, communications, naming,
+synchronization, consistency and replication, fault tolerance and
+security, and paradigms such as web-based, object-based, file systems,
+and coordination-based. 
+
+
+<hr>
+
+<h1><a name="prereq">Prerequisites</a></h1>
+<p>
+The prerequisites for this course are CS 210 Computer Systems and CS112. Students without the prerequisites will not be allowed to enroll in the course.
+
+ 
+<hr>
+<h1><a name="grade">Grade Breakdown</a></h1>
+<p style="font-weight:bold">
+Your final grade will be determined approximately as follows:
+</p>
+<table border="1" bordercolor="#000000"
+ style="background-color:#FFFFFF" width="100%" cellpadding="3" cellspacing="3">
+<tr>
+  <td>
+    Take Home Midterm
+  </td>
+  <td>
+    15%
+  </td>
+</tr>
+<tr>
+  <td>
+    Take Home Final 
+  </td>
+  <td>
+    25% 
+  </td>
+</tr>
+<tr>
+  <td>
+    Assignments
+  </td>
+  <td>
+    25%
+  </td>
+</tr>
+<tr>
+  <td>
+    Project 
+  </td>
+  <td>
+    35%
+  </td>
+</tr>
+</table>
+
+<hr>
+<h1><a name="structure">Weekly Class Structure and Evaluation</a></h1>
+<p>
+The class meets twice a week.  In general the weekly sessions will be
+divided into a lecture session and a lab session.  The lab session
+will be more interactive in nature and focus on programming topics and
+guiding the development of the term projects.   As part of the lab sessions the
+instructor will evalute project progress and comprehension
+of the lecture material. 
+
+<hr>
+<h1><a name="project">Project and Workload</a></h1>
+
+<p style="font-weight:bold">Be forewarned the workload in this course will be heavy. To master
+the conceptual material covered in the lecture and prepare you for
+completion of the project there will be weekly reading and programming
+required outside of class time.</p>
+
+
+<p>The course is organized around a term-long programming project that
+constitutes 35% of the grade. The project will utilize a library of
+foundational components that will be in part developed by the students
+during the semester. Additional components will be
+provide by the instructor. The goal of the project is two fold,
+firstly to allow the principles and paradigms covered in class to be
+utilized and explored practically and secondly to get exposure to the
+process of system construction, including design, software
+development, documentation, testing and debugging.</p>
+
+<p>The project this year will be a distributed capture the flag style
+game.</p>
+
+<p>
+The projects will be evaluated along 3 main dimensions, design,
+project management, and functionality. Design will be judged based on
+accompanying documentation that the students will prepare describing
+their system with respect to organization, software structure and
+choices made. Project management will be evaluated based on a project
+log that the students will submit. The logs will document weekly
+project meetings in which students are expected to identify status
+with respect to implementation progress, problems encountered, and
+what is to be done in the following week. Finally project
+functionality will be evaluating using a test suite designed to
+validate protocol adherence and various test-cases such as scalability
+and unexpected disconnection.  Each group will do a final presentation
+of their projects to the instructor during the schedule final exam time.
+</p>
+
+<h2>
+<h1><a name="651">CS651</a></h1>
+Please come and discuss the additional requirements with the
+instructor.
+
+<hr>
+<h1><a name="schedule">Class Schedule</a></h1>
+<p>
+<h2>Special Dates </h2>
+You should be sure to be familar with the
+<a href="http://www.bu.edu/reg/dates/idates-spring12.html">Official
+Semester Dates</a>
+
+<p>Some of the critical Semester Dates are below:
+<ul>
+  <li>
+  <b>The Day to ADD Clases Monday January 30, 2012</b>
+  </li>
+  <li>
+  <b>The Last Day to DROP Clases (without a 'W' grade) Tuesday,
+  February 21, 2012</b>
+  </li>
+  <li>
+  <b>The Last Day to DROP Classes (with a 'W' grade) Friday, March
+  30, 2012</b> 
+  </li>
+</ul>
+</p>
+
+<h2><a name="byweek">Weekly Schedule</a></h2>
+<p style="font-weight:bold">The following is the tentative
+schedule that will be adjusted as necessary</p>
+ 
+<p>
+<table border="1" bordercolor="#000000"
+ style="background-color:#FFFFFF" width="100%" cellpadding="3" cellspacing="3">
+	<tr>
+		<td><h2>Week</h2></td>
+		<td><h2>Dates</h2></td>
+		<td><h2>Description</h2></td>
+		<td><h2>References</h2></td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>Jan 16</td>
+		<td>
+		  Lecture: Introduction and Class Overview<br>
+		</td>
+		<td>
+		  DSPP: Chapter 1
+		</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>Jan 22, 24</td>
+		<td>
+		  Lecture: Architectures<br>
+		  Lab: Crash course on 'C' and UNIX Network Programming.
+		</td> 
+		<td>
+		  DSPP: Chapter 2
+		</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td>Jan 29, 31</td>
+		<td>
+		  *Lab: TBA<br>
+ 		  Lecture: Processes
+		</td>
+		<td>
+		  DSPP: Chapter 3
+		</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>Feb 5, 7</td>
+		<td>
+  		  Lecture: Communications<br>
+		  Lab: TBA
+		</td>
+		<td>
+		  DSPP: Chapter 4
+		</td>
+	</tr>
+	<tr>
+		<td>5</td>
+		<td>Feb 12, 14</td>
+		<td>
+		  Lecture: Communication<br>
+		  Lab: TBA
+		</td>
+		<td>
+		  DSPP: Chapter 4
+		</td>
+	</tr>
+	<tr>
+		<td>6</td>
+		<td>Feb 19, 21</td>
+		<td>
+		  Lecture: Communication<br>
+		  Lab: TBA
+		</td>
+		<td>
+		  DSPP: Chapter 4
+		</td>
+	</tr>
+	<tr>
+		<td>7</td>
+		<td>Feb 26, Feb 28</td>
+		<td>
+		  Lecture: Naming<br> 
+		  Lab: TBA
+		</td>
+		<td>
+		  DSPP: Chapter 5
+		</td>
+	</tr>
+	<tr>
+		<td>8</td>
+		<td>Mar 5, 7</td>
+		<td>
+		  Lecture: Naming<br>
+		  Lab: TBA
+		</td>
+		<td>
+		  DSPP: Chapter 5
+		</td>
+	</tr>
+	<tr>
+		<td>9</td>
+		<td>Mar 19, 21</td>
+		<td>
+		  Lecture: Syncronization<br> 
+		  Lab: TBA
+		</td>
+		<td>
+		  DSPP: Chapter 6
+		</td>
+	</tr>
+	<tr>
+		<td>10</td>
+		<td>Mar 26, 28</td>
+		<td>
+		  Lecture: Syncronization<br>
+		  Lab: TBA
+		</td>
+		<td>
+		  DSPP: Chapter 6
+		</td>
+	</tr>
+	<tr>
+		<td>11</td>
+		<td>Apr 2, 4</td>
+		<td>
+		  Lecture: Consistency and Replication<br>
+		  Lab: TBA
+		</td>
+		<td>
+		  DSPP: Chapter 7
+		</td>
+	</tr>
+	<tr>
+		<td>12</td>
+		<td>Apr 9, 11</td>
+		<td>
+		  Lecture: Consistency and Replication<br>
+		  Lab: TBA
+		</td>
+		<td>
+		  DSPP: Chapter 7
+		</td>
+	</tr>
+	<tr>
+		<td>13</td>
+		<td>Apr 16</td>
+		<td>
+		  Lecture: Overview Spanner<br>
+		  Lab: TBA
+		</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>14</td>
+		<td>Apr 23, 25</td>
+		<td>
+		  Lecture: Paper Review Spanner<br>
+		  Lab: TBA
+		</td>
+		<td></td>
+	</tr>
+	<tr>
+	        <td>15</td>
+		<td>Apr 30, May 2</td>
+		<td>
+		  Lab: Game Eval
+		  Lab: Game Eval
+		</td>
+		<td>
+		</td>
+	</tr>
+</table>
+
+<h2><a name="exams">Tests/Exams</a></h2>
+The following is the tentative dates for the exams.
+<table border="1" bordercolor="#000000"
+ style="background-color:#FFFFFF" width="100%" cellpadding="3" cellspacing="3">
+	<tr>
+	  <td><h2>Name</h2></td>
+	  <td><h2>Date</h2></td>
+	  <td><h2>Solutions</h2></td>
+	</tr>
+	<tr>
+	  <td>
+	    <a
+	    href="http://www.cs.bu.edu/~jappavoo/Resources/451/midterm.pdf">MidTerm</a>
+	  </td>
+	  <td>Out March 5, Due March 23 @ 4:30am</td>
+	  <td>
+	    	    <a
+	    href="http://www.cs.bu.edu/~jappavoo/Resources/451/midtermsol.pdf">Solutions</a>
+	  </td>
+	</tr>
+	<tr>
+	  <td><a
+	    href="http://www.cs.bu.edu/~jappavoo/Resources/451/final.pdf">Final</a>
+	  </td>
+	  <td>Out May 2, Due on Day of Exam: TBA</td>
+	  <td> NONE </td>
+	</tr>
+</table>
+
+<h2><a name="labs">Assignement Material</a></h2>
+<p> If there is any information for a give lab it will be posted here.
+<table border="1" bordercolor="#000000"
+ style="background-color:#FFFFFF" width="100%" cellpadding="3" cellspacing="3">
+	<tr>
+	  <td><h2>Name</h2></td>
+	  <td><h2>Dates</h2></td>
+	  <td><h2>Resources</h2></td>
+	</tr>
+	<tr>
+	  <tr>
+	    <td><a name="a1">Assignment 1</a></td>
+	    <td>Due: Jan 31</td>
+	    <td><a
+	      href="http://www.cs.bu.edu/~jappavoo/Resources/451/a1/a1.pdf">writeup</a>,
+      	   <a href="http://www.cs.bu.edu/~jappavoo/Resources/451/a1/Resources">files</a></td>
+	</tr>
+	<tr>
+	  <tr>
+	    <td><a name="a2">Assignment 2</a></td>
+	    <td>Due: Feb 22</td>
+	    <td><a
+	      href="http://www.cs.bu.edu/~jappavoo/Resources/451/a2/a2.pdf">writeup</a>,
+	   <a href="http://www.cs.bu.edu/~jappavoo/Resources/451/daGame">files</a></td>
+	      
+	</tr>
+	<tr>
+	  <tr>
+	    <td><a name="a3">Assignment 3</a></td>
+	    <td>TBA</td>
+	    <td>
+	      <a href="http://www.cs.bu.edu/~jappavoo/Resources/451/a3/a3.pdf">writeup</a>,
+	   <a href="http://www.cs.bu.edu/~jappavoo/Resources/451/daGame/">files</a></td>
+	</tr>
+	<tr>
+	  <tr>
+	    <td><a name="a4">Assignment 4</a></td>
+	    <td>TBA</td>
+	    <td>TBA</td>
+	</tr>
+</table>
+
+<hr>
+<h1><a name="texts">TextBooks</a></h1>
+<p>
+[DS:CS Required Text] Andrew S. Tanenbaum and Maarten Van Steen, Distrib
+uted Systems Principles and Paradigms,
+<p>
+[UNP] Another useful text, which covers network programming in C, that we
+will rely on is Richard Stevens, Bill Fenner and Andrew M. Rudoff,<a href="http://www.unpbook.com/">
+"UNIX Network Programming - The Sockets Networking API."</a>,
+3ed. Addison-Wesley Professional, ISBN-10: 0131411551
+ISBN-13: 978-0131411555.</p>
+<p>
+Boths books are available from the BU bookstore.
+
+<p>
+[optional] Brian W. Kernighan and Rob Pike, "The UNIX Programming
+Environment", Prentice Hall, 1984.  (Another Classic Text).
+
+<hr>
+<h1><a name="oref">Online References</a></h1>
+<h2>C/Unix</h2>
+<ul>
+<li><a href="http://csapp.cs.cmu.edu/public/unixfaq.html">Unix FAQ</a> (courtesy <a href="http://www.cs.cmu.edu/~bryant">Randal
+E. Bryant</a> and <a href="http://www.cs.cmu.edu/~droh">David R. O'Hallaron</a> of CMU)</li>
+<li><a href="http://heather.cs.ucdavis.edu/~matloff/unix.html">Norm
+  Matloff's Unix/C Tutorial Center</a></li>
+</ul>
+  
+<h2>GNU/Unix Tools</h2>
+The <a href="http://www.gnu.org/">GNU project</a> provides <a
+href="http://www.gnu.org/manual/">online manuals</a> for all of the
+GNU tools, including:
+<ul>
+  <li><a href="http://projects.gnome.org/gedit/">gedit</a>(a simple graphical unix text editor)</li>
+<li><a
+  href="http://www.ece.uwaterloo.ca/~ece250/Online/Unix/pico/">pico</a>
+  (a simple text editor). </li>
+<li><a href="http://www.gnu.org/software/emacs">Emacs</a> (text
+  editor) (reference card for version 21) </li>
+<li><a href="http://gcc.gnu.org/onlinedocs/">GCC</a> (compiler driver) </li>
+<li><a href="http://www.gnu.org/software/gdb">GDB</a> (debugger) </li>
+<li><a href="http://www.gnu.org/software/make">Make</a> (program building utility) </li>
+<li><a href="http://heather.cs.ucdavis.edu/~matloff/UnixAndC/CLanguage/Debug.html">Norm Matloff's GDB tutorial</a>
+<li>Quick GDB reference ( <a
+  href="http://www.cs.bu.edu/~jappavoo/Resources/210/gdbnotes-ia32.pdf">ia32</a>,
+  <a href="http://www.cs.bu.edu/~jappavoo/Resources/210/gdbnotes-x86-64.pdf">x86-64</a>,
+  <a href="http://www.cs.bu.edu/~jappavoo/Resources/210/gdbnotes.txt">txt</a>
+  ) </li>
+</ul>  
+<h2>Other</h2>
+<ul>
+<li><a href="http://www.ima.umn.edu/~arnold/disasters/disasters.html">Some disasters due to bad numerical computations</a></li>
+<li>Useful documentation on the Intel IA-32 architecture, Volumes
+<a href="http://www.cs.bu.edu/~jappavoo/Resources/210/IA32_basic_architecture(24547007)-v1.pdf">1</a> , <a href="http://www.cs.bu.edu/~jappavoo/Resources/210/IA32_instruction_set_reference(24547107)-v2.pdf">2</a> and <a href="http://www.cs.bu.edu/~jappavoo/Resources/210/IA32_system_programming_guide(24547207)-v3.pdf">3</a>.</li>
+</ul>
+<hr>
+
+
+<hr>
+<h1><a name="honesty">Academic Honesty</a></h1>
+
+<p>
+Assignments must be completed individually. Discussion of issues in
+computer systems is encouraged, but representing the work of another
+person as your own is expressly forbidden. This includes "borrowing",
+"stealing", copying programs/solutions or parts of them from
+others. We may use an automated plagiarism checker. Cheating will not
+be tolerated under any circumstances. Handing in your own work a day
+or two late will affect your grade far less than turning in a copy of
+someone else's work on time!
+
+<p>
+See the <a href="http://www.bu.edu/cas/students/undergrad-resources/code/">CAS
+Academic Conduct Code</a>, in particular regarding plagiarism and
+cheating on exams. Copies of the CAS Academic Conduct Code are also
+available in room CAS 105. A student suspected to violate this code
+will be reported to the Academic Conduct Committee, and if found
+culpable, the student will receive a grade of "F" for the course.
+
+
+<hr>
+<address></address>
+<!-- hhmts start -->Last modified: Fri Feb  1 11:25:01 EST 2013 <!-- hhmts end -->
+</body> </html>
