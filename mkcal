@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SEPT1="01200000"
+DAYS="Tue|Thu"
+EXCLUDE="02/17/15|03/10/15|03/12/15"
+for ((i=0; i<101; i++)); do  
+  date -v+${i}d -j ${SEPT1} +"%a %D" 
+done | egrep $DAYS | egrep -v $EXCLUDE | cat -n | while read i day date;
+do
+  echo -e "$date\t"'/* Class ' $i '*/' Lecture $i
+done   
+
