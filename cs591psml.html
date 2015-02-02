@@ -297,6 +297,53 @@ based on students back grounds and interests
 This list will be extended in the first few weeks of class
 based on students back grounds and interests.
 
+<ol>
+  <b><i>Fourier Analysis</i></b>
+  <li>
+    Study a set of functions using Fourier Analysis
+  </li>
+  <b><i>ASC</i></b>
+  <li> Add Input output support </li>
+  </li>
+  <b><i>Neueral Network Hardware</i></b>
+  <li>
+  Add a UART TX/RX wrapper interface to a version of DANA that can be
+  used to communication an NN Transaction to DANA 
+  </li>
+  <li>
+  Currently, the modified FANN configuration only supports an
+  all-to-all connectivity subset of FANN configurations. This needs to
+  be relaxed to enable more limited connection strategies. This is a
+  precursor to enabling Convolutional Neural Network (CNN)
+  support. Note, that this specific issue does not allow for
+  connections that skip layers. 
+  </li>
+  <li>
+  There exists the potential for some fault-tolerance within neural
+  networks as evidenced by previous work with modular redundancy and
+  no voting, see BARC 2015. A more advanced approach involves
+  dynamically splitting "important" nodes or ignoring "un-important"
+  nodes while an NN is executing (on an NN accelerator like DANA or
+  simply in software). Much of this work is TBD, but this should be at
+  least one publishable unit of work, here.
+  </li>
+  <li>
+  The FANN should be generic enough to support Convolutional Neural
+  Networks (CNNs). However, this support doesn't already exist. At the
+  software level, we need to add support for this. What is primarily needed:
+  1) Add max-pooling activation function 2) Possibly some support for
+  describing a CNN and then mapping this to a FANN configuration 3)
+  Evaluation and testing 
+  </li>
+  <li>
+  The current version of DANA (at least at the level of gem5
+  integration) uses an x86 ISA interface. This needs to be moved to
+  the RISC-V ISA.  Note, that the RISC-V ISA should have support for
+  generic "accelerator" extensions. However, we may need more support
+  than this currently offers. 
+  </li>
+</ol>
+
 <h2>Collaboration and Academic Honesty</h2>
 
 <p>
