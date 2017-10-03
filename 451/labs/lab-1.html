@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../style.css" type="text/css">
+		<title>CS451/651 Lab 1: MapReduce</title>
+	</head>
+	<body>
+		<div align="center">
+			<h2><a href="../../cs451.html">CS451/651</a> - Spring 2017</h2>
+			<h1>CS451/651 Lab 1: MapReduce</h1>
+			<h3>Due: Fri Jan 27, 11:59pm</h3>
+		</div>
+		<hr>
+
+		<h3>Introduction</h3>
+		<p>
+		In this lab you'll build a MapReduce library as a way to learn
+		the Go programming language and as a way to learn about fault
+		tolerance in distributed systems. In the first part you will
+		write a simple MapReduce program.  In the second part you will
+		write a Master that hands out tasks to workers, and handles
+		failures of workers.  The interface to the library and the
+		approach to fault tolerance is similar to the one described in
+		the original
+		<a href="http://research.google.com/archive/mapreduce-osdi04.pdf">MapReduce paper</a>.
+
+		<h3>Collaboration Policy</h3>
+		<p>
+		You must write all the code you hand in for CS451/651, except for
+		code that we give you as part of the assignment. You are not
+		allowed to look at anyone else's solution, and you are not
+		allowed to look at code from previous years. You may discuss
+		the assignments with other students, but you may not look at or
+		copy each others' code. Please do not publish your code or make
+		it available to future CS451/651 students -- for example, please do
+		not make your code visible on github.
+
+		<h3>Software</h3>
+		<p>
+		You'll implement this lab (and all the labs) in
+		<a href="http://www.golang.org/">Go</a>. The Go web site
+		contains lots of tutorial information which you may want to
+		look at.
+
+		<p>
+		We supply you with parts of a MapReduce implementation that
+		supports both distributed and non-distributed operation (just
+		the boring bits). You'll fetch the initial lab software with
+		<a href="http://git.or.cz/">git</a> (a version control system).
+		To learn more about git, look at the
+		<a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html">git user's manual</a>,
+		or, if you are already familiar with other version control
+		systems, you may find this
+		<a href="http://eagain.net/articles/git-for-computer-scientists/">CS-oriented overview of git</a>
+		useful.
+
+		<p>
+		The URL for the course git repository is
+                <tt>https://github.com/BU-CS451-DS/goals-2017.git</tt>.
+To install the files in your CS account, you need to <i>clone</i>
+the course repository, by running the commands below.  You may use one of the csa[123] machines.  You can
+log into a csa host with ssh.  All the software and instructions 
+assume you are doing the work on the csa machines.  
+
+		<pre>
+$ git clone  https://github.com/BU-CS451-DS/goals-2017.git 451
+$ cd 451
+$ ls
+Makefile src
+</pre>
+
+		<p>
+		Git allows you to keep track of the changes you make to the code.
+		For example, if you want to checkpoint your progress, you can
+		<em>commit</em> your changes by running:
+		<pre>
+$ git commit -am 'partial solution to lab 1'</pre>
+
+		<p>
+		The Map/Reduce implementation we give you has support for two
+		modes of operation, <em>sequential</em> and
+		<em>distributed</em>. In the former, the map and reduce tasks
+		are all executed in serial: first, the first map task is
+		executed to completion, then the second, then the third, etc.
+		When all the map tasks have finished, the first reduce task is
+		run, then the second, etc. This mode, while not very fast, can
+		be very useful for debugging, since it removes much of the
+		noise seen in a parallel execution. The distributed mode runs
+		many worker threads that first execute map tasks in parallel,
+		and then reduce tasks. This is much faster, but also harder to
+		implement and debug.
+
+		<h3>Preamble: Getting familiar with the source</h3>
+		<p>
+		The mapreduce package provides a simple Map/Reduce library with
+		a sequential implementation. Applications should normally call
+		Distributed() [located in master.go] to start a job, but may
+		instead call Sequential() [also in master.go] to get a
+		sequential execution for debugging purposes.
+
+		<p>
+		The flow of the mapreduce implementation is as follows:
+		<ol>
+		<li>
+			The application provides a number of input files, a map
+			function, a reduce function, and the number of reduce
+			tasks (<tt>nReduce</tt>).
+		<li>
+			A master is created with this knowledge. It spins up an
+			RPC server (see <tt>master_rpc.go</tt>), and waits for
+			workers to register (using the RPC call
+			<tt>Register()</tt> [defined in <tt>master.go</tt>]).
+			As tasks become available (in steps
+			4 and 5), <tt>schedule()</tt> [<tt>schedule.go</tt>]
+			decides how to assign those tasks to workers, and how to
+			handle worker failures.
+		<li>
+			The master considers each input file one map task, and
+			makes a call to <tt>doMap()</tt>
+			[<tt>common_map.go</tt>] at least once for each task. It
+			does so either directly (when using
+			<tt>Sequential()</tt>) or by issuing the <tt>DoTask</tt>
+			RPC on a worker [<tt>worker.go</tt>]. Each call to
+			<tt>doMap()</tt> reads the appropriate file, calls the
+			map function on that file's contents, and produces
+			<tt>nReduce</tt> files for each map file. Thus, there
+			will be #files x <tt>nReduce</tt> files after all map
+			tasks are done:
+
+			<pre>
+f0-0, ..., f0-0, f0-<nReduce-1>, ...,
+f<#files-1>-0, ... f<#files-1>-<nReduce-1>.</pre>
+
+		<li>
+			The master next makes a call to <tt>doReduce()</tt>
+			[<tt>common_reduce.go</tt>] at least once for each
+			reduce task.  As for <tt>doMap()</tt>, it does so either
+			directly or through a worker. <tt>doReduce()</tt>
+			collects nReduce reduce files from each map
+			(<tt>f-*-<reduce></tt>), and runs the reduce function
+			on those files. This produces <tt>nReduce</tt> result
+			files.
+		<li>
+			The master calls <tt>mr.merge()</tt>
+			[<tt>master_splitmerge.go</tt>], which merges all the
+			<tt>nReduce</tt> files produced by the previous step
+			into a single output.
+		<li>
+			The master sends a Shutdown RPC to each of its workers,
+			and then shuts down its own RPC server.
+		</ol>
+
+		<p class="note">
+		Over the course of the following exercises, you will have to
+		write/modify <tt>doMap</tt>, <tt>doReduce</tt>, and
+		<tt>schedule</tt> yourself. These are located in
+		<tt>common_map.go</tt>, <tt>common_reduce.go</tt>, and
+		<tt>schedule.go</tt> respectively. You will also have to write
+		the map and reduce functions in <tt>../main/wc.go</tt>.
+
+		<p>
+		You should not need to modify any other files, but reading them
+		might be useful in order to understand how the other methods
+		fit into the overall architecture of the system.
+
+		<h3>Part I: Map/Reduce input and output</h3>
+		<p>The Map/Reduce implementation you are given is missing some
+		pieces. Before you can write your first Map/Reduce function
+		pair, you will need to fix the sequential implementation. In
+		particular, the code we give you is missing two crucial
+		pieces: the function that divides up the output of a map task,
+		and the function that gathers all the inputs for a reduce task.
+		These tasks are carried out by the <tt>doMap()</tt> function in
+		<tt>common_map.go</tt>, and the <tt>doReduce()</tt> function in
+		<tt>common_reduce.go</tt> respectively. The comments in those
+		files should point you in the right direction.
+
+		<p>
+		To help you determine if you have correctly implemented
+		<tt>doMap()</tt> and <tt>doReduce()</tt>, we have provided you
+		with a Go test suite that checks the correctness of your
+		implementation. These tests are implemented in the file
+		<tt>test_test.go</tt>. To run the tests for the sequential
+		implementation that you have now fixed, run:
+
+		<pre>
+$ export GOROOT=/research/sesa/451/go
+$ export PATH=$PATH:$GOROOT/bin
+$ export GOPATH=$HOME/451
+$ cd "$GOPATH/src/mapreduce"
+$ go test -run Sequential mapreduce/... 
+ok  	mapreduce	2.694s</pre>
+
+		<p class="todo">
+		You receive full credit for this part if your software passes
+		the Sequential tests (as run by the command above) when we run
+		your software on our machines.
+
+		<p>
+		If the output did not show <em>ok</em> next to the tests, your
+		implementation has a bug in it. To give more verbose output,
+		set <tt>debugEnabled = true</tt> in <tt>common.go</tt>, and add
+		<tt>-v</tt> to the test command above. You will get much more
+		output along the lines of:
+
+		<pre>
+$ go test -v -run Sequential mapreduce/... 
+=== RUN   TestSequentialSingle
+master: Starting Map/Reduce task test
+Merge: read mrtmp.test-res-0
+master: Map/Reduce task completed
+--- PASS: TestSequentialSingle (1.34s)
+=== RUN   TestSequentialMany
+master: Starting Map/Reduce task test
+Merge: read mrtmp.test-res-0
+Merge: read mrtmp.test-res-1
+Merge: read mrtmp.test-res-2
+master: Map/Reduce task completed
+--- PASS: TestSequentialMany (1.33s)
+PASS
+ok  	mapreduce	2.672s</pre>
+
+		<h3>Part II: Single-worker word count</h3>
+		<p>
+		Now that the map and reduce tasks are connected, we can start
+		implementing some interesting Map/Reduce operations. For this
+		lab, we will be implementing word count &mdash; a simple and
+		classical Map/Reduce example. Specifically, your task is to
+		modify <tt>mapF</tt> and <tt>reduceF</tt> so that
+		<tt>wc.go</tt> reports the number of occurrences of each word.
+		A word is any contiguous sequence of letters, as
+		determined by
+		<a href="http://golang.org/pkg/unicode/#IsLetter"><tt>unicode.IsLetter</tt></a>.
+
+		<p>
+    There are some input files with pathnames of the form <tt>pg-*.txt</tt> in
+    ~/451/src/main, downloaded from <a
+      href="https://www.gutenberg.org/ebooks/search/%3Fsort_order%3Ddownloads">Project
+    Gutenberg</a>.
+		Go ahead and try to compile the initial software we provide you
+		and run it with the provided input files:
+
+		<pre>
+$ export GOROOT=/research/sesa/451/go
+$ export PATH=$PATH:$GOROOT/bin
+$ export GOPATH=$HOME/451
+$ cd "$GOPATH/src/main"
+$ go run wc.go master sequential pg-*.txt
+# command-line-arguments
+./wc.go:14: missing return at end of function
+./wc.go:21: missing return at end of function</pre>
+
+		<p>
+		The compilation fails because we haven't written a complete map
+		function (<tt>mapF()</tt>) and reduce function
+		(<tt>reduceF()</tt>) in <tt>wc.go</tt> yet. Before you start
+		coding read Section 2 of the
+		<a href="http://research.google.com/archive/mapreduce-osdi04.pdf">MapReduce paper</a>.
+		Your <tt>mapF()</tt> and <tt>reduceF()</tt> functions will
+		differ a bit from those in the paper's Section 2.1. Your
+		<tt>mapF()</tt> will be passed the name of a file, as well as
+		that file's contents; it should split it into words, and return
+		a Go slice of key/value pairs, of type
+		<tt>mapreduce.KeyValue</tt>. Your <tt>reduceF()</tt> will be
+		called once for each key, with a slice of all the values
+		generated by <tt>mapF()</tt> for that key; it should return a
+		single output value.
+
+		<p>
+		You can test your solution using:
+		<pre>
+$ cd "$GOPATH/src/main"
+$ time go run wc.go master sequential pg-*.txt
+master: Starting Map/Reduce task wcseq
+Merge: read mrtmp.wcseq-res-0
+Merge: read mrtmp.wcseq-res-1
+Merge: read mrtmp.wcseq-res-2
+master: Map/Reduce task completed
+14.59user 3.78system 0:14.81elapsed</pre>
+
+		<p>
+		The output will be in the file "mrtmp.wcseq". You can
+		remove the output file and all intermediate files with:
+		<pre>$ rm mrtmp.*</pre>
+
+		<p>Your implementation is correct if the following command
+		produces the following top 10 words:
+		<pre>
+$ sort -n -k2 mrtmp.wcseq | tail -10
+he: 34077
+was: 37044
+that: 37495
+I: 44502
+in: 46092
+a: 60558
+to: 74357
+of: 79727
+and: 93990
+the: 154024</pre>
+
+		<p>To make testing easy for you, run:
+		<pre>$ sh ./test-wc.sh</pre>
+		<p>and it will report if your solution is correct or not.
+
+		<p class="todo">
+		You receive full credit for this part if your Map/Reduce word
+		count output matches the correct output for the sequential
+		execution above when we run your software on our machines.
+
+		<ul class="hints">
+			<li>
+				a good read on what strings are in Go is the
+				<a href="http://blog.golang.org/strings">Go Blog on strings</a>.
+
+			<li>
+				you can use
+				<a href="http://golang.org/pkg/strings/#FieldsFunc"><tt>strings.FieldsFunc</tt></a>
+				to split a string into components.
+
+			<li>
+				the strconv package
+				(<a href="http://golang.org/pkg/strconv/">http://golang.org/pkg/strconv/</a>)
+				is handy to convert strings to integers etc.
+		</ul>
+
+		<h3>Part III: Distributing MapReduce tasks</h3>
+
+		<p>
+		One of Map/Reduce's biggest selling points is that the
+		developer should not need to be aware that their code is
+		running in parallel on many machines. In theory, we should be
+		able to take the word count code you wrote above, and
+		automatically parallelize it!
+
+		<p>
+		Our current implementation runs all the map and reduce tasks one
+		after another on the master. While this is conceptually simple,
+		it is not great for performance. In this part of the lab, you
+		will complete a version of MapReduce that splits the work up
+		over a set of worker threads, in order to exploit multiple
+		cores. While the work is not distributed across multiple
+		machines as in &ldquo;real&rdquo; Map/Reduce deployments, your
+		implementation will be using RPC and channels to simulate a
+		truly distributed computation.
+		
+		<p>
+		To coordinate the parallel execution of tasks, we will use a
+		special master thread, which hands out work to the workers and
+		waits for them to finish. To make the lab more realistic, the
+		master should only communicate with the workers via RPC. We
+		give you the worker code (<tt>mapreduce/worker.go</tt>), the
+		code that starts the workers, and code to deal with RPC
+		messages (<tt>mapreduce/common_rpc.go</tt>).
+		
+		<p>
+		Your job is to complete <tt>schedule.go</tt> in the
+		<tt>mapreduce</tt> package. In particular, you should modify
+		<tt>schedule()</tt> in <tt>schedule.go</tt> to hand out the map
+		and reduce tasks to workers, and return only when all the tasks
+		have finished.
+
+		<p>
+		Look at <tt>run()</tt> in <tt>master.go</tt>. It calls
+		your <tt>schedule()</tt> to run the map and reduce tasks, then
+		calls <tt>merge()</tt> to assemble the per-reduce-task outputs
+		into a single output file. <tt>schedule</tt> only needs to tell
+		the workers the name of the original input file
+		(<tt>mr.files[task]</tt>) and the task <tt>task</tt>; each worker
+		knows from which files to read its input and to which files to
+		write its output. The master tells the worker about a new task
+		by sending it the RPC call <tt>Worker.DoTask</tt>, giving a
+		<tt>DoTaskArgs</tt> object as the RPC argument.
+
+		<p>
+		When a worker starts, it sends a Register RPC to the master.
+		<tt>mapreduce.go</tt> already implements the master's
+		<tt>Master.Register</tt> RPC handler for you, and passes the
+		new worker's information to <tt>mr.registerChannel</tt>.  Your
+		<tt>schedule</tt> should process new worker registrations by
+		reading from this channel.
+
+		<p>
+		Information about the currently running job is in the
+		<tt>Master</tt> struct, defined in <tt>master.go</tt>. Note
+		that the master does not need to know which Map or Reduce
+		functions are being used for the job; the workers will take
+		care of executing the right code for Map or Reduce (the correct
+		functions are given to them when they are started by
+		<tt>main/wc.go</tt>).
+
+		<p>
+		To test your solution, you should use the same Go test suite as
+		you did in Part I, except swapping out <tt>-run Sequential</tt>
+		with <tt>-run TestBasic</tt>. This will execute the distributed
+		test case without worker failures instead of the sequential
+		ones we were running before:
+		<pre>$ go test -run TestBasic mapreduce/...</pre>
+
+		<p class="todo">
+		You receive full credit for this part if your software passes
+		<tt>TestBasic</tt> from <tt>test_test.go</tt> (the test you run
+		with the command above) when we run your software on our
+		machines.
+
+		<!--
+		<p>
+		You should also re-execute your word count application in a
+		distributed setting and verify that you still get the correct
+		output:
+$ cd "$GOPATH/src/main"
+$ go run wc.go master kjv12.txt localhost:7777
+$ go run wc.go worker localhost:7777 localhost:7778 &
+$ go run wc.go worker localhost:7777 localhost:7779 &
+# wait for master to finish
+$ sh ./test-wc.sh
+Passed test
+		-->
+
+		<ul class="hints">
+			<li>
+				The master should send RPCs to the workers in
+				parallel so that the workers can work on tasks
+				concurrently.  You will find the <tt>go</tt>
+				statement useful for this purpose and the
+				<a href="http://golang.org/pkg/net/rpc/">Go RPC documentation</a>.
+			<li>
+				The master may have to wait for a worker to
+				finish before it can hand out more tasks. You
+				may find channels useful to synchronize threads
+				that are waiting for reply with the master once
+				the reply arrives. Channels are explained in
+				the document on
+				<a href="http://golang.org/doc/effective_go.html#concurrency">Concurrency in Go</a>.
+			<li>
+				The easiest way to track down bugs is to insert
+				<tt>debug()</tt> statements, collect the output in
+				a file with
+				<tt>go test -run TestBasic mapreduce/... &gt; out</tt>,
+				and then think about whether the output matches
+				your understanding of how your code should
+				behave. The last step (thinking) is the most
+				important.
+		</ul>
+
+		<p class="note">
+		The code we give you runs the workers as threads within a
+		single UNIX process, and can exploit multiple cores on a single
+		machine. Some modifications would be needed in order to run the
+		workers on multiple machines communicating over a network. The
+		RPCs would have to use TCP rather than UNIX-domain sockets;
+		there would need to be a way to start worker processes on all
+		the machines; and all the machines would have to share storage
+		through some kind of network file system.
+
+		<h3>Part IV: Handling worker failures</h3>
+
+		<p>
+		In this part you will make the master handle failed workers.
+		MapReduce makes this relatively easy because workers don't have
+		persistent state.  If a worker fails, any RPCs that the master
+		issued to that worker will fail (e.g., due to a timeout).
+		Thus, if the master's RPC to the worker fails, the master
+		should re-assign the task given to the failed worker to another
+		worker.
+
+		<p>
+		An RPC failure doesn't necessarily mean that the worker failed;
+		the worker may just be unreachable but still computing. Thus,
+		it may happen that two workers receive the same task and compute
+		it. However, because tasks are idempotent, it doesn't matter if
+		the same task is computed twice &mdash; both times it will
+		generate the same output. So, you don't have to do anything
+		special for this case. (Our tests never fail workers in the
+		middle of task, so you don't even have to worry about several
+		workers writing to the same output file.)
+
+		<p class="note">
+		You don't have to handle failures of the master; we will assume
+		it won't fail. Making the master fault-tolerant is more
+		difficult because it keeps persistent state that would have to
+		be recovered in order to resume operations after a master
+		failure. Much of the later labs are devoted to this challenge.
+
+		<p>
+		Your implementation must pass the two remaining test cases in
+		<tt>test_test.go</tt>. The first case tests the failure of one
+		worker, while the second test case tests handling of many
+		failures of workers. Periodically, the test cases start new
+		workers that the master can use to make forward progress, but
+		these workers fail after handling a few tasks. To run these
+		tests:
+		<pre>$ go test -run Failure mapreduce/...</pre>
+
+		<p class="todo">
+		You receive full credit for this part if your software passes
+		the tests with worker failures (those run by the command above)
+		when we run your software on our machines.
+
+		<h3>Part V: Inverted index generation (optional)</h3>
+		<div class="challenge">
+			<p>
+			Word count is a classical example of a Map/Reduce
+			application, but it is not an application that many
+			large consumers of Map/Reduce use. It is simply not
+			very often you need to count the words in a really
+			large dataset. For this challenge exercise, we will
+			instead have you build Map and Reduce functions for
+			generating an <em>inverted index</em>.
+
+			<p>
+			Inverted indices are widely used in computer science,
+			and are particularly useful in document searching.
+			Broadly speaking, an inverted index is a map from
+			interesting facts about the underlying data, to the
+			original location of that data. For example, in the
+			context of search, it might be a map from keywords to
+			documents that contain those words.
+
+			<p>
+			We have created a second binary in <tt>main/ii.go</tt>
+			that is very similar to the <tt>wc.go</tt> you built
+			earlier. You should modify <tt>mapF</tt> and
+			<tt>reduceF</tt> in <tt>main/ii.go</tt> so that they
+			together produce an inverted index. Running
+			<tt>ii.go</tt> should output a list of tuples, one per
+			line, in the following format:
+			<pre>
+$ go run ii.go master sequential pg-*.txt
+$ head -n5 mrtmp.iiseq
+A: 16 pg-being_ernest.txt,pg-dorian_gray.txt,pg-dracula.txt,pg-emma.txt,pg-frankenstein.txt,pg-great_expectations.txt,pg-grimm.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-metamorphosis.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt
+ABC: 2 pg-les_miserables.txt,pg-war_and_peace.txt
+ABOUT: 2 pg-moby_dick.txt,pg-tom_sawyer.txt
+ABRAHAM: 1 pg-dracula.txt
+ABSOLUTE: 1 pg-les_miserables.txt</pre>
+
+			If it is not clear from the listing above, the format is:
+      <pre>word: #documents documents,sorted,and,separated,by,commas</pre>
+
+			For full credit on this challenge, you must pass
+			<tt>test-ii.sh</tt>, which runs:
+
+			<pre>
+$ sort -k1,1 mrtmp.iiseq | sort -snk2,2 mrtmp.iiseq | grep -v '16' | tail -10
+women: 15 pg-being_ernest.txt,pg-dorian_gray.txt,pg-dracula.txt,pg-emma.txt,pg-frankenstein.txt,pg-great_expectations.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-metamorphosis.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt
+won: 15 pg-being_ernest.txt,pg-dorian_gray.txt,pg-dracula.txt,pg-frankenstein.txt,pg-great_expectations.txt,pg-grimm.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-metamorphosis.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt
+wonderful: 15 pg-being_ernest.txt,pg-dorian_gray.txt,pg-dracula.txt,pg-emma.txt,pg-frankenstein.txt,pg-great_expectations.txt,pg-grimm.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt
+words: 15 pg-dorian_gray.txt,pg-dracula.txt,pg-emma.txt,pg-frankenstein.txt,pg-great_expectations.txt,pg-grimm.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-metamorphosis.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt
+worked: 15 pg-dorian_gray.txt,pg-dracula.txt,pg-emma.txt,pg-frankenstein.txt,pg-great_expectations.txt,pg-grimm.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-metamorphosis.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt
+worse: 15 pg-being_ernest.txt,pg-dorian_gray.txt,pg-dracula.txt,pg-emma.txt,pg-frankenstein.txt,pg-great_expectations.txt,pg-grimm.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt
+wounded: 15 pg-being_ernest.txt,pg-dorian_gray.txt,pg-dracula.txt,pg-emma.txt,pg-frankenstein.txt,pg-great_expectations.txt,pg-grimm.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt
+yes: 15 pg-being_ernest.txt,pg-dorian_gray.txt,pg-dracula.txt,pg-emma.txt,pg-great_expectations.txt,pg-grimm.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-metamorphosis.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt
+younger: 15 pg-being_ernest.txt,pg-dorian_gray.txt,pg-dracula.txt,pg-emma.txt,pg-frankenstein.txt,pg-great_expectations.txt,pg-grimm.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt
+yours: 15 pg-being_ernest.txt,pg-dorian_gray.txt,pg-dracula.txt,pg-emma.txt,pg-frankenstein.txt,pg-great_expectations.txt,pg-grimm.txt,pg-huckleberry_finn.txt,pg-les_miserables.txt,pg-moby_dick.txt,pg-sherlock_holmes.txt,pg-tale_of_two_cities.txt,pg-tom_sawyer.txt,pg-ulysses.txt,pg-war_and_peace.txt</pre>
+		</div>
+
+		<h3>Running all tests</h3>
+		<p>
+		You can run all the tests by running the script
+		<tt>src/main/test-mr.sh</tt>. With a correct solution, your
+		output should resemble:
+<pre>
+$ sh ./test-mr.sh
+==&gt; Part I
+ok  	mapreduce	3.053s
+
+==&gt; Part II
+Passed test
+
+==&gt; Part III
+ok  	mapreduce	1.851s
+
+==&gt; Part IV
+ok  	mapreduce	10.650s
+
+==&gt; Part V (challenge)
+Passed test</pre>
+
+		<h3>Handin procedure</h3>
+
+		<div class="important">
+			<p>
+			Before submitting, please run <em>all</em> the tests one final time. <b>You</b> are responsible for making sure your code works.
+
+			<pre>$ sh ./test-mr.sh</pre>
+		</div>
+
+		<p>
+Submit your code via the gsubmit command using the provided makefile
+
+<pre>
+$ cd ~/451
+$ make lab1
+</pre>
+
+You can use the gsubmit command to check that it was submitted correctly.
+
+
+		<p class="note">
+		You may submit multiple times. We will use the timestamp of
+		your <strong>last</strong> submission for the purpose of
+		calculating late days.
+
+		<hr>
+
+		<address>
+			Please post questions on <a href="http://piazza.com">Piazza</a>.
+		</address>
+
+	</body>
+</html>
+
+<!--  LocalWords:  Paxos Sharded shard sharding sharded Put's src shardmaster
+-->
+<!--  LocalWords:  shardkv cd TestBasic TestUnreliable Go's RPCs RPC's GID px
+-->
+<!--  LocalWords:  kvpaxos Config ErrWrongGroup Handin gzipped czvf whoami tgz
+-->
