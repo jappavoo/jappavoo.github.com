@@ -278,26 +278,26 @@ Presidents’ Day</td>
 </tr>
 <tr> <!-- week of apr 10 -->
   <td id="2017-4-10"><span class="date">apr 10</span></td>
-  <td id="2017-4-11" class="lecture"><span class="date">apr 11</span><br />
-    <b>LEC 18:</b> <a href="notes/l-borg.txt">Cluster Management</a><br />
-    <span class="reading"><b>Preparation:</b>  Read <a href="papers/borg.pdf">Borg (2015)</a> (<a href="questions.html?q=q-borg&amp;lec=18">Question</a>)</span></td>
+  <td id="2017-4-11" class="special"><span class="date">apr 11</span><br />
+    <i>Project Hacking Day</i></td>
   <td id="2017-4-12" class="recitation"><span class="date">apr 12</span></td>
   <td id="2017-4-13" class="lecture"><span class="date">apr 13</span><br />
-    <b>LEC 19:</b> <a href="notes/l-dht.txt">Peer-to-peer: Trackerless Bittorrent and DHTs</a><br />
-    <span class="reading"><b>Preparation:</b>  Read <a href="papers/stoica-chord.pdf">Chord (2001)</a> and <a href="http://www.bittorrent.org/beps/bep_0005.html">Trackerless Bittorrent (2008)</a> (<a href="questions.html?q=q-chord&amp;lec=19">Question</a>)</span></td>
+    <b>LEC 18:</b> <a href="notes/l-borg.txt">Cluster Management</a><br />
+    <span class="reading"><b>Preparation:</b>  Read <a href="papers/borg.pdf">Borg (2015)</a> (<a href="questions.html?q=q-borg&amp;lec=18">Question</a>)</span></td>
   <td id="2017-4-14"><span class="date">apr 14</span></td>
 </tr>
 <tr> <!-- week of april 17 -->
   <td id="2017-4-17" class="holiday"><span class="date">apr 17</span><br />
 Patroits' day</td>
   <td id="2017-4-18" class="lecture"><span class="date">apr 18</span><br />
-    <b>LEC 20:</b> Peer-to-peer: <a href="notes/l-bitcoin.txt">Bitcoin</a><br />
-    <span class="reading"><b>Preparation:</b>  Read <a href="papers/bitcoin.pdf">Bitcoin</a>, <a href="http://www.michaelnielsen.org/ddi/how-the-bitcoin-protocol-actually-works/">summary</a> (<a href="questions.html?q=q-bitcoin&amp;lec=20">Question</a>)</span></td>
+    <b>LEC 19:</b> <a href="notes/l-dht.txt">Peer-to-peer: Trackerless Bittorrent and DHTs</a><br />
+    <span class="reading"><b>Preparation:</b>  Read <a href="papers/stoica-chord.pdf">Chord (2001)</a> and <a href="http://www.bittorrent.org/beps/bep_0005.html">Trackerless Bittorrent (2008)</a> (<a href="questions.html?q=q-chord&amp;lec=19">Question</a>)</span></td>
   <td id="2017-4-19" class="special"><span class="date">apr 19</span><br />
    Monday Schedule: NO DISCUSSION
 </td>
-  <td id="2017-4-20" class="special"><span class="date">apr 20</span><br />
-    <i>Project Hacking Day</i></td>
+  <td id="2017-4-20" class="lecture"><span class="date">apr 20</span><br />
+    <b>LEC 20:</b> Peer-to-peer: <a href="notes/l-bitcoin.txt">Bitcoin</a><br />
+    <span class="reading"><b>Preparation:</b>  Read <a href="papers/bitcoin.pdf">Bitcoin</a>, <a href="http://www.michaelnielsen.org/ddi/how-the-bitcoin-protocol-actually-works/">summary</a> (<a href="questions.html?q=q-bitcoin&amp;lec=20">Question</a>)</span></td>
   <td id="2017-4-21" class="due"><span class="date">apr 21</span>
     <span class="deadline"><b>DUE:</b> <a href="project.html">Grad Project report </a></span><br />
   </td>
@@ -315,7 +315,7 @@ Patroits' day</td>
 <tr> <!-- week of may 1 -->
   <td id="2017-5-1" class="date"><span class="date">may 1</span><br />
   <td id="2017-5-2" class="lecture"><span class="date">may 2</span><br />
-    <i>Last day of classes</i></td>
+    <b>LEC 23:</b>Project Presentations/Demos<br /></td>
   <td id="2017-5-3"><span class="date">may 3</span></td>
   <td id="2017-5-4"><span class="date">may 4</span></td>
   <td id="2017-5-5"><span class="date">may 5</span></td>
